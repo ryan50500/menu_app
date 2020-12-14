@@ -82,13 +82,30 @@ const menu = [
   ];
 
   const sectionCenter = document.querySelector('.section-center');
-  const filterBtns = document.querySelectorAll('.filter-btn');
+  const container = document.querySelector('.btn-container');
 
 //   load items
   window.addEventListener('DOMContentLoaded',function() {
      displayMenuItems(menu);
-  });
-//   filter items
+     const categories = menu.reduce(
+         function(values, item){
+            //  if array doesn't include item category, add new category to array
+            if(!values.includes(item.category)){
+                values.push(item.category)
+            }
+            // otherwise just return the array
+            return values;
+     },
+    //  returning array with initial value
+      ['all']
+  );
+   const categoryBtns = categories.map(function(category){
+       return  `<button type="button" class="filter-btn" data-id=${category}>
+       ${category}</button>`
+   }).join('');
+   container.innerHTML = categoryBtns;
+   const filterBtns = document.querySelectorAll('.filter-btn');
+   //   filter items
 filterBtns.forEach(function(btn){
     btn.addEventListener('click', function(e){
       const category = e.currentTarget.dataset.id;
@@ -104,6 +121,7 @@ filterBtns.forEach(function(btn){
           }
       })
     });
+  });
 
 
   function displayMenuItems(menuItems){
